@@ -1,0 +1,20 @@
+server:
+  port: 80
+
+spring:
+  cloud:
+    gateway:
+      # 自动从 nacos 发现所有微服务
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      # 路由规则（可扩展）
+      routes:
+        - id: mine-learn
+          uri: lb://mine-learn
+          predicates:
+            - Path=/mine-learn/**
+          filters:
+            - StripPrefix=1

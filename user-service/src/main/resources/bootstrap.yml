@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: movie-service  # 每个服务唯一，不能重复
+  cloud:
+    nacos:
+      # 注册中心
+      discovery:
+        server-addr: localhost:8848
+      # 配置中心（自动拉取公共配置！）
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml  # 配置文件格式
