@@ -4,11 +4,9 @@ spring:
 
   cloud:
     nacos:
-      # 注册中心
       discovery:
-        server-addr: localhost:8848
-
-      # 配置中心
+        server-addr: ${NACOS_HOST:localhost}:8848
       config:
-        server-addr: localhost:8848
+        server-addr: ${NACOS_HOST:localhost}:8848
         file-extension: yaml
+
