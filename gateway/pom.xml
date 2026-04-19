@@ -27,12 +27,6 @@
     </properties>
 
     <dependencies>
-        <!-- 你的公共模块 -->
-        <dependency>
-            <groupId>org.mine.common</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
         <!-- Gateway 核心 -->
         <dependency>

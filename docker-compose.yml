@@ -1,0 +1,99 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.1.0
+    container_name: mysql8
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: adminvc680920
+      MYSQL_DATABASE: study
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    restart: always
+
+  nacos:
+    image: nacos/nacos-server:v1.4.6
+    container_name: nacos
+    ports:
+      - "8848:8848"
+    environment:
+      MODE: standalone
+    networks:
+      - app-network
+    restart: always
+    # 健康检查：检测nacos接口是否可用
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1:8848/nacos" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis1:
+    image: redis:6.2
+    container_name: redis1
+    ports:
+      - "6379:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    networks:
+      - app-network
+  redis2:
+    image: redis:6.2
+    container_name: redis2
+    ports:
+      - "6380:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    networks:
+      - app-network
+  redis3:
+    image: redis:6.2
+    container_name: redis3
+    ports:
+      - "6381:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    networks:
+      - app-network
+  redis4:
+    image: redis:6.2
+    container_name: redis4
+    ports:
+      - "6382:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    networks:
+      - app-network
+  redis5:
+    image: redis:6.2
+    container_name: redis5
+    ports:
+      - "6383:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    networks:
+      - app-network
+  redis6:
+    image: redis:6.2
+    container_name: redis6
+    ports:
+      - "6384:6379"
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    networks:
+      - app-network
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "8888:8888"
+    environment:
+      - NACOS_HOST=nacos
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - nacos
+networks:
+  app-network:
+
+volumes:
+  mysql-data:

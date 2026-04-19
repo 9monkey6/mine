@@ -1,0 +1,15 @@
+
+关闭：
+redis-cli -p 6379 shutdown
+redis-cli -p 6380 shutdown
+redis-cli -p 6381 shutdown
+redis-cli -p 6382 shutdown
+redis-cli -p 6383 shutdown
+redis-cli -p 6384 shutdown
+开启：
+redis-server --port 6379 --cluster-enabled yes --cluster-config-file nodes-6379.conf
+redis-server --port 6380 --cluster-enabled yes --cluster-config-file nodes-6380.conf
+redis-server --port 6381 --cluster-enabled yes --cluster-config-file nodes-6381.conf
+redis-server --port 6382 --cluster-enabled yes --cluster-config-file nodes-6382.conf
+redis-server --port 6383 --cluster-enabled yes --cluster-config-file nodes-6383.conf
+redis-server --port 6384 --cluster-enabled yes --cluster-config-file nodes-6384.conf
