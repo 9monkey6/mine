@@ -1,0 +1,5 @@
+
+//找到项目
+cd "/mnt/e/learn/to the other side/eclipse/mine"
+//确保docker启动再执行
+docker-compose up -d

@@ -1,0 +1,147 @@
+# 查看 Docker 版本
+docker -v
+
+# 查看本地所有镜像
+docker images
+
+# 查看正在运行的容器
+docker ps
+
+# 查看所有容器（包含已停止的）
+docker ps -a
+
+# 搜索镜像（例：搜索jdk）
+docker search jdk
+
+# 拉取镜像（下载镜像）
+docker pull 镜像名:版本
+
+# 删除本地镜像
+docker rmi 镜像名/镜像ID
+
+# 强制删除镜像
+docker rmi -f 镜像名/镜像ID
+
+# 构建镜像（当前目录Dockerfile）
+docker build -t 镜像名:版本 .
+
+# 后台启动容器
+docker run -d 镜像名:版本
+
+# 后台启动容器 + 映射端口
+docker run -d -p 宿主机端口:容器端口 镜像名:版本
+
+# 后台启动容器 + 共用主机网络（解决Nacos连不上）  //docker run -d -p 8888:8888 --name gateway -e NACOS_HOST=192.168.0.113 gateway:1.0
+docker run -d --net=host --name 容器名 镜像名:版本
+
+# 停止指定容器
+docker stop 容器名/容器ID
+
+# 启动已存在的停止容器
+docker start 容器名/容器ID
+
+# 重启容器
+docker restart 容器名/容器ID
+
+# 暂停容器
+docker pause 容器名/容器ID
+
+# 解除暂停容器
+docker unpause 容器名/容器ID
+
+# 删除已停止的容器
+docker rm 容器名/容器ID
+
+# 强制删除正在运行的容器
+docker rm -f 容器名/容器ID
+
+# 查看容器实时日志（排查项目启动报错必备）
+docker logs 容器名/容器ID
+
+# 持续滚动查看容器日志
+docker logs -f 容器名/容器ID
+
+# 进入容器内部终端
+docker exec -it 容器名/容器ID /bin/bash
+
+# 退出容器内部终端
+exit
+
+# 查看容器详细信息
+docker inspect 容器名/容器ID
+
+# 查看Docker系统磁盘占用
+docker system df
+
+# 清理无用镜像、缓存（释放空间）
+docker system prune
+
+
+更新基本操作：
+docker rm -f gateway
+
+cd /d E:\learn\to the other side\eclipse\mine
+mvn clean package -DskipTests
+
+cd gateway
+docker build -t gateway:1.0 .
+docker run -d -p 8888:8888 --name gateway -e NACOS_HOST=192.168.0.113 gateway:1.0
+
+
+
+项目必备 Docker 常用命令速查手册
+一、项目整体启动 / 关闭 / 重启（最常用、必背）
+bash
+运行
+# 1. 一键启动所有服务（构建镜像 + 后台运行）
+docker-compose up -d --build
+
+# 2. 停止所有服务（不删除容器，下次可直接启动）
+docker-compose stop
+
+# 3. 关闭并删除所有容器、网络（彻底清理，重新部署用）
+docker-compose down
+二、单服务操作（gateway/nacos 等）
+bash
+运行
+# 1. 单独重启 gateway（最常用！改代码后必用）
+docker-compose up -d --build gateway
+
+# 2. 强制重建 gateway（解决网络/配置异常）
+docker-compose up -d --force-recreate gateway
+
+# 3. 单独停止某个服务
+docker-compose stop gateway
+三、日志查看（排查报错必用）
+bash
+运行
+# 1. 实时查看 gateway 日志
+docker-compose logs -f gateway
+
+# 2. 实时查看 nacos 日志
+docker-compose logs -f nacos
+
+# 3. 查看所有服务日志
+docker-compose logs -f
+四、状态检查
+bash
+运行
+# 查看所有容器运行状态（Up 为正常）
+docker-compose ps
+五、强制清理（解决冲突 / 端口占用 / 启动失败）
+bash
+运行
+# 1. 强制删除旧 gateway 容器
+docker rm -f gateway
+
+# 2. 彻底清理所有无用容器/镜像/网络（终极急救）
+docker system prune -f
+六、进入容器内部（调试用）
+bash
+运行
+# 进入 nacos 容器内部
+docker exec -it nacos /bin/bash
+
+# 进入 mysql 容器内部
+docker exec -it mysql8 /bin/bash
+
