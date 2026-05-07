@@ -1,4 +1,3 @@
-version: '3'
 services:
   mysql:
     image: mysql:8.1.0
@@ -24,76 +23,124 @@ services:
     networks:
       - app-network
     restart: always
-    # 健康检查：检测nacos接口是否可用
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://127.0.0.1:8848/nacos" ]
       interval: 5s
       timeout: 5s
       retries: 20
 
+  # 6 个独立 Redis 节点（你原来想要的）
   redis1:
     image: redis:6.2
     container_name: redis1
     ports:
       - "6379:6379"
-    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis1-data:/data
     networks:
       - app-network
+    restart: always
+
   redis2:
     image: redis:6.2
     container_name: redis2
     ports:
       - "6380:6379"
-    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis2-data:/data
     networks:
       - app-network
+    restart: always
+
   redis3:
     image: redis:6.2
     container_name: redis3
     ports:
       - "6381:6379"
-    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis3-data:/data
     networks:
       - app-network
+    restart: always
+
   redis4:
     image: redis:6.2
     container_name: redis4
     ports:
       - "6382:6379"
-    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis4-data:/data
     networks:
       - app-network
+    restart: always
+
   redis5:
     image: redis:6.2
     container_name: redis5
     ports:
       - "6383:6379"
-    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis5-data:/data
     networks:
       - app-network
+    restart: always
+
   redis6:
     image: redis:6.2
     container_name: redis6
     ports:
       - "6384:6379"
-    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes
-    networks:
-      - app-network
-
-  gateway:
-    build: ./gateway
-    container_name: gateway
-    ports:
-      - "8888:8888"
-    environment:
-      - NACOS_HOST=nacos
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --appendonly yes --protected-mode no --bind 0.0.0.0
+    volumes:
+      - redis6-data:/data
     networks:
       - app-network
     restart: always
-    depends_on:
-      - nacos
+
+#  gateway:
+#    build: ./gateway
+#    container_name: gateway
+#    environment:
+#      - NACOS_HOST=nacos
+#    networks:
+#      - app-network
+#    restart: always
+#    depends_on:
+#      - nacos
+#
+#  user-service:
+#    build: ./user-service
+#    container_name: user-service
+#    environment:
+#      - NACOS_HOST=nacos
+#      - MYSQL_HOST=mysql8
+#      - REDIS_HOST=redis1:6379,redis2:6379,redis3:6379,redis4:6379,redis5:6379,redis6:6379
+#    networks:
+#      - app-network
+#    restart: always
+#    depends_on:
+#      - nacos
+#      - mysql
+#      - redis1
+#      - redis2
+#      - redis3
+#      - redis4
+#      - redis5
+#      - redis6
+
 networks:
   app-network:
 
 volumes:
   mysql-data:
+  redis1-data:
+  redis2-data:
+  redis3-data:
+  redis4-data:
+  redis5-data:
+  redis6-data:

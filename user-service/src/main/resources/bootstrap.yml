@@ -1,12 +1,16 @@
 spring:
   application:
-    name: movie-service  # 每个服务唯一，不能重复
+    name: user-service
   cloud:
     nacos:
-      # 注册中心
       discovery:
-        server-addr: localhost:8848
-      # 配置中心（自动拉取公共配置！）
+        server-addr: ${NACOS_HOST:localhost}:8848
       config:
-        server-addr: localhost:8848
-        file-extension: yaml  # 配置文件格式
+        server-addr: ${NACOS_HOST:localhost}:8848
+        file-extension: yaml
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/study
+
+  redis:
+    cluster:
+      nodes: ${REDIS_HOST:localhost}:6379

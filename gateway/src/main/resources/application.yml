@@ -9,12 +9,3 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-
-      # 路由规则（可扩展）
-      routes:
-        - id: mine-learn
-          uri: lb://mine-learn
-          predicates:
-            - Path=/mine-learn/**
-          filters:
-            - StripPrefix=1

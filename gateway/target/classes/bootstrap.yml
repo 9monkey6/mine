@@ -9,4 +9,24 @@ spring:
       config:
         server-addr: ${NACOS_HOST:localhost}:8848
         file-extension: yaml
+    gateway:
+      routes:
+        # 路由1：访问 /user/** 就转发给 user-service
+        - id: user-route
+          uri: lb://user-service  # lb = 负载均衡
+          predicates:
+            - Path=/user/**,/login/**,/register/**  # 放行登录注册
+  redis:
+    cluster:
+      nodes: redis1:6379,redis2:6379,redis3:6379,redis4:6379,redis5:6379,redis6:6379
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
 
+        # 路由2：访问 /order/** 就转发给 order-service
+#        - id: order-route
+#          uri: lb://order-service
+#          predicates:
+#            - Path=/order/**
