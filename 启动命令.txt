@@ -1,0 +1,7 @@
+一键启动所有中间件加微服务
+
+docker-compose up -d
+
+redis集群建立连接
+
+docker exec redis1 redis-cli --cluster create $(docker exec redis1 hostname -i):6379 $(docker exec redis2 hostname -i):6379 $(docker exec redis3 hostname -i):6379 $(docker exec redis4 hostname -i):6379 $(docker exec redis5 hostname -i):6379 $(docker exec redis6 hostname -i):6379 --cluster-replicas 1 --cluster-yes
